@@ -1,0 +1,30 @@
+{% extends 'home.html' %}
+
+{% block title %}Lista de Animales{% endblock %}
+
+{% block content %}
+    <h1>Animales Disponibles para Adopción</h1>
+    <ul class="list-group">
+        {% for animal in animales %}
+            <li class="list-group-item">
+                <strong>{{ animal.nombre }}</strong> - {{ animal.especie }} <br>
+                Características: {{ animal.caracteristicas }} <br>
+                Registrado por: {{ animal.registrado_por.get_full_name|default:animal.registrado_por.username }}  <!-- Muestra el nombre del usuario que registró el animal -->
+                <br>
+                {% if animal.adoptado %}
+                    <span class="badge badge-success">Adoptado</span>
+                {% else %}
+                    <span class="badge badge-info">Disponible</span>
+                {% endif %}
+                <br>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'solicitar_adopcion' animal_id=animal.id %}" class="btn btn-primary mt-2">Solicitar Adopción</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-secondary mt-2">Inicia sesión para solicitar</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">No hay animales disponibles en este momento.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

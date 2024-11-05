@@ -1,0 +1,5 @@
+superuser:
+
+user:     adolfo
+correo:   adolfo.sepulved06@inacapmail.cl
+pass:     pethomeapp

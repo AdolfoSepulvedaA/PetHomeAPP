@@ -1,0 +1,71 @@
+{% extends 'home.html' %}
+
+{% block title %}Gestión de Solicitudes{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Solicitudes de Adopción</h1>
+
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Animal</th>
+                    <th>Solicitante</th>
+                    <th>Estado de Solicitud</th>
+                    <th>Estado del Animal</th>
+                    <th>Fecha de Solicitud</th>
+                    <th>Mensaje Adicional</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>
+                            <i class="fas fa-paw"></i> {{ solicitud.animal.nombre }}
+                        </td>
+                        <td>{{ solicitud.usuario.username }}</td>
+                        <td>
+                            {% if solicitud.estado == 'pendiente' %}
+                                <span class="badge bg-warning text-dark" data-bs-toggle="tooltip" title="Esperando revisión">{{ solicitud.estado|title }}</span>
+                            {% elif solicitud.estado == 'aceptada' %}
+                                <span class="badge bg-success" data-bs-toggle="tooltip" title="Solicitud aceptada">{{ solicitud.estado|title }}</span>
+                            {% else %}
+                                <span class="badge bg-danger" data-bs-toggle="tooltip" title="Solicitud rechazada">{{ solicitud.estado|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if solicitud.animal.adoptado %}
+                                <span class="badge bg-secondary">Adoptado</span>
+                            {% else %}
+                                <span class="badge bg-info">Disponible</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ solicitud.fecha_solicitud|date:"d/m/Y H:i" }}</td>
+                        <td>{{ solicitud.mensaje|default:"Sin mensaje" }}</td>
+                        <td>
+                            {% if solicitud.estado == 'pendiente' %}
+                                <a href="{% url 'aceptar_solicitud' solicitud.id %}" class="btn btn-sm btn-success me-1" data-bs-toggle="tooltip" title="Aceptar solicitud"><i class="fas fa-check"></i></a>
+                                <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Rechazar solicitud"><i class="fas fa-times"></i></a>
+                            {% else %}
+                                <span class="text-muted">Sin acciones</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No hay solicitudes en este momento.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Inicializar tooltips de Bootstrap
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+{% endblock %}

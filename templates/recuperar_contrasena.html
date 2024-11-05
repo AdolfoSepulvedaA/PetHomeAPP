@@ -1,0 +1,15 @@
+{% extends 'home.html' %}
+
+{% block title %}Recuperar Contraseña{% endblock %}
+
+{% block content %}
+    <h2>Recuperar Contraseña</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" class="form-control" id="correo" name="correo" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Correo de Recuperación</button>
+    </form>
+{% endblock %}

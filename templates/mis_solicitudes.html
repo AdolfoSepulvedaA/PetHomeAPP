@@ -1,0 +1,96 @@
+{% extends 'home.html' %}
+
+{% block title %}Mis Solicitudes{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Mis Solicitudes de Adopción</h1>
+        
+        <h3>Solicitudes Activas</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Animal</th>
+                    <th>Estado de Solicitud</th>
+                    <th>Estado del Animal</th>
+                    <th>Fecha de Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes_activas %}
+                    <tr>
+                        <td>{{ solicitud.animal.nombre }}</td>
+                        <td>
+                            {% if solicitud.estado == 'pendiente' %}
+                                <span class="badge bg-warning text-dark">{{ solicitud.estado|title }}</span>
+                            {% elif solicitud.estado == 'aceptada' %}
+                                <span class="badge bg-success">{{ solicitud.estado|title }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ solicitud.estado|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if solicitud.animal.adoptado %}
+                                <span class="badge bg-secondary">Adoptado</span>
+                            {% else %}
+                                <span class="badge bg-info">Disponible</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center alert alert-warning">No tienes solicitudes activas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Historial de Solicitudes</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Animal</th>
+                    <th>Estado de Solicitud</th>
+                    <th>Estado del Animal</th>
+                    <th>Fecha de Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes_historicas %}
+                    <tr>
+                        <td>{{ solicitud.animal.nombre }}</td>
+                        <td>
+                            {% if solicitud.estado == 'pendiente' %}
+                                <span class="badge bg-warning text-dark">{{ solicitud.estado|title }}</span>
+                            {% elif solicitud.estado == 'aceptada' %}
+                                <span class="badge bg-success">{{ solicitud.estado|title }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ solicitud.estado|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if solicitud.animal.adoptado %}
+                                <span class="badge bg-secondary">Adoptado</span>
+                            {% else %}
+                                <span class="badge bg-info">Disponible</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ solicitud.fecha_solicitud|date:"d/m/Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center alert alert-warning">No tienes solicitudes en el historial.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <a href="{% url 'lista_animales' %}" class="btn btn-primary">Volver a la lista de animales</a>
+            {% if solicitudes_activas %}
+                <a href="{% url 'gestionar_solicitudes' %}" class="btn btn-secondary">Gestionar Solicitudes</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

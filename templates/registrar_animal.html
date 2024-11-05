@@ -1,0 +1,49 @@
+{% extends 'home.html' %}
+{% load widget_tweaks %}  <!-- Cargar los filtros de widget_tweaks -->
+
+{% block title %}Registrar Animal{% endblock %}
+
+{% block content %}
+    <h1>Registrar Animal</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}  <!-- Muestra errores de formulario no específicos -->
+
+        <div class="form-group">
+            <label for="{{ form.nombre.id_for_label }}">Nombre del Animal</label>
+            {{ form.nombre|add_class:"form-control" }}  <!-- Usar la clase de Bootstrap -->
+            {{ form.nombre.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.especie.id_for_label }}">Especie</label>
+            {{ form.especie|add_class:"form-control" }}
+            {{ form.especie.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.edad.id_for_label }}">Edad Aproximada</label>
+            {{ form.edad|add_class:"form-control" }}
+            {{ form.edad.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.caracteristicas.id_for_label }}">Características Adicionales</label>
+            {{ form.caracteristicas|add_class:"form-control" }}
+            {{ form.caracteristicas.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar Animal</button>
+    </form>
+
+    <a href="{% url 'lista_animales' %}" class="btn btn-secondary mt-3">Ver lista de animales</a>
+{% endblock %}

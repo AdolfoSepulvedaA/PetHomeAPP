@@ -1,0 +1,43 @@
+{% extends 'home.html' %}
+
+{% block title %}Vista Administrador{% endblock %}
+
+{% block content %}
+    <h1>Vista Administrador</h1>
+
+    <h2>Registrar Nuevo Animal</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Renderiza el formulario -->
+        <button type="submit" class="btn btn-primary">Registrar Animal</button>
+    </form>
+
+    <h2>Solicitudes de Adopción</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Animal</th>
+                <th>Registrado Por</th>  <!-- Nueva columna para mostrar quién registró el animal -->
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudes %}
+                <tr>
+                    <td><a href="{% url 'detalle_solicitud' solicitud.id %}">{{ solicitud.id }}</a></td>
+                    <td>{{ solicitud.usuario }}</td>
+                    <td><a href="{% url 'detalle_animal' solicitud.animal.id %}">{{ solicitud.animal }}</a></td>
+                    <td>{{ solicitud.animal.registrado_por.get_full_name|default:solicitud.animal.registrado_por.username }}</td>  <!-- Muestra el nombre del usuario que registró el animal -->
+                    <td>{{ solicitud.estado }}</td>
+                    <td>
+                        <a href="{% url 'aceptar_solicitud' solicitud.id %}" class="btn btn-success btn-sm">Aceptar</a>
+                        <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn btn-danger btn-sm">Rechazar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
